@@ -1,4 +1,4 @@
-# bulk Insert
+# Bulk Insert
 
 Load Data와 Batch Insert 성능 비교
 
