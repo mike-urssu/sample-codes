@@ -28,8 +28,8 @@ public class FrameExtractor {
         File video = new File("opencv/files/opencv/BTS.mp4");
         File destination = new File("opencv/files/opencv/extractedFrames");
 
-//        for (File file : FileUtils.listFiles(destination, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE))
-//            file.delete();
+        for (File file : FileUtils.listFiles(destination, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE))
+            file.delete();
 
         extractFramesFromVideo(video, destination);
     }
