@@ -19,3 +19,13 @@ blur 후 이미지
 ## FrameExtractor
 
 동영상 파일로부터 Frame 추출
+
+# FFMPEG
+
+FFMPEG 다운로드 위치: https://ffmpeg.org/download.html#build-windows
+
+옵션 설명: https://hamelot.io/visualization/using-ffmpeg-to-convert-a-set-of-images-into-a-video/
+
+## FrameMerger
+
+frame을 동영상으로 변환
