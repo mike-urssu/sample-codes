@@ -25,7 +25,7 @@ public class Mosaic {
         }
 
 //        Imgcodecs.imwrite(image.getAbsolutePath(), frame);
-        Imgcodecs.imwrite("./opencv/files/opencv/after.jpg", frame);    // 이미지 생성
+        Imgcodecs.imwrite("opencv/files/opencv/after.jpg", frame);    // 이미지 생성
     }
 
     private static void blurArea(Mat frame, Position position) {

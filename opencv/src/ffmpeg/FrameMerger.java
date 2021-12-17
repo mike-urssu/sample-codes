@@ -27,7 +27,7 @@ public class FrameMerger {
         process.waitFor();
         bufferStream.interrupt();
         if (process.exitValue() != 0)
-            throw new RuntimeException("FFMPEG: 프레임을 동영상으로 만드는 과정에서 오류가 발생했습니다.");
+            throw new FFMPEGNotWorkingException(sourceDirectory);
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -134,5 +134,11 @@ class LoggingOutputStream extends OutputStream {
             }
         } else
             outputStream.write(buffer);
+    }
+}
+
+class FFMPEGNotWorkingException extends RuntimeException {
+    public FFMPEGNotWorkingException(File video) {
+        super("프레임을 동영상으로 만드는 과정에서 오류가 발생했습니다.\n경로( " + video + ")를 확인해주세요");
     }
 }
