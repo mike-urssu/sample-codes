@@ -4,6 +4,8 @@
 
 SHA 256 암호화 사이트: https://coding.tools/kr/sha256
 
+코드: https://github.com/mike-urssu/sample-codes/blob/develop/utils/src/encryption/SHA256.java
+
 ### 설명
 
 Text를 **SHA256 암호화 방식**을 이용하여 암호화한다.
