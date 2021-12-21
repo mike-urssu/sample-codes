@@ -44,8 +44,10 @@ public class CustomizedFrameExtractor {
             }
             videoCapture.release();
             writer.flush();
-        } else
+        } else {
+            encodedVideo.renameTo(video);
             throw new CannotOpenVideoException(video);
+        }
         encodedVideo.renameTo(video);
     }
 

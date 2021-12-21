@@ -1,6 +1,8 @@
 package opencv;
 
+import encryption.SHA256;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
@@ -10,15 +12,21 @@ import java.io.IOException;
 
 public class FrameExtractor {
     public static void extractFramesFromVideo(File video, File destination) {
-        VideoCapture videoCapture = new VideoCapture(video.getAbsolutePath());
+        File encodedVideo = new File(video.getParent(), SHA256.encrypt(FilenameUtils.removeExtension(video.getName())) + "." + FilenameUtils.getExtension(video.getName()));
+        video.renameTo(encodedVideo);
+
+        VideoCapture videoCapture = new VideoCapture(encodedVideo.getAbsolutePath());
         if (videoCapture.isOpened()) {
             int imageIndex = 0;
             Mat frame = new Mat();
             while (videoCapture.read(frame))
                 Imgcodecs.imwrite(new File(destination, imageIndex++ + ".jpg").getAbsolutePath(), frame);
             videoCapture.release();
-        } else
+        } else {
+            encodedVideo.renameTo(video);
             throw new CannotOpenVideoException(video);
+        }
+        encodedVideo.renameTo(video);
     }
 
     public static void main(String[] args) throws IOException {
