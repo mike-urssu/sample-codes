@@ -4,10 +4,8 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class SHA256 {
-    private static final String algorithm = "SHA-256";
-
-    public static String encrypt(String text) {
+public class Encoder {
+    public static String encrypt(String algorithm, String text) {
         try {
             MessageDigest md = MessageDigest.getInstance(algorithm);
             md.update(text.getBytes());
@@ -23,9 +21,10 @@ public class SHA256 {
     }
 
     public static void main(String[] args) {
+        String algorithm = "SHA-256";
         String text = "1234";
         System.out.println("text: " + text);
-        System.out.println("encrypted text: " + encrypt(text));
+        System.out.println("encrypted text: " + encrypt(algorithm, text));
     }
 }
 

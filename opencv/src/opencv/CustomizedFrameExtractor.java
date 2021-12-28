@@ -1,6 +1,6 @@
 package opencv;
 
-import encryption.SHA256;
+import encryption.Encoder;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.opencv.core.Mat;
@@ -8,13 +8,16 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 public class CustomizedFrameExtractor {
     public static final BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
 
     public static void extractFramesFromVideo(File video, File destination, int second) throws IOException {
-        File encodedVideo = new File(video.getParent(), SHA256.encrypt(FilenameUtils.removeExtension(video.getName())) + "." + FilenameUtils.getExtension(video.getName()));
+        File encodedVideo = new File(video.getParent(), Encoder.encrypt("SHA-256", FilenameUtils.removeExtension(video.getName())) + "." + FilenameUtils.getExtension(video.getName()));
         video.renameTo(encodedVideo);
 
         VideoCapture videoCapture = new VideoCapture(encodedVideo.getAbsolutePath());
