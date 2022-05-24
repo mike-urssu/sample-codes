@@ -1,6 +1,6 @@
 # encryption
 
-## Encoder
+## Encoder(암호화)
 
 [암호화 사이트](https://coding.tools/kr/sha256)
 
@@ -8,22 +8,30 @@
 
 ### 설명
 
-Text를 `MD2, MD5, SHA-1, SHA-256, SHA-384, SHA-512` 방식을 이용하여 암호화한다.
+`MD2, MD5, SHA-1, SHA-256, SHA-384, SHA-512` 방식을 이용하여 Text를 암호화한다.
 
 # zip
 
-## Unzip
-
-[소스 코드](https://github.com/mike-urssu/sample-codes/blob/main/utils/src/zip/Unzip.java)
-
-### 사용한 library
+## 사용한 library
 
 - commons-compress-1.21.jar
-  - 압축 관련 메소드 사용
+    - 압축 관련 메소드 사용
 - xz-1.9.jar
-  - 7z 압축 파일을 푸는데 사용
+    - 7z 압축 파일을 푸는데 사용
 - commons-io-2.11.0.jar
-  - FileUtils, FilenameUtils 사용
+    - FileUtils, FilenameUtils 사용
+
+## Zip(폴더 압축하기)
+
+[소스 코드](https://github.com/mike-urssu/sample-codes/blob/main/utils/src/zip/Zip.java)
+
+### 설명
+
+directory 안에 있는 모든 파일을 zipFile로 압축한다.
+
+## Unzip(압축파일 풀기)
+
+[소스 코드](https://github.com/mike-urssu/sample-codes/blob/main/utils/src/zip/Unzip.java)
 
 ### 설명
 

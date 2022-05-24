@@ -21,6 +21,7 @@
 [README](https://github.com/mike-urssu/sample-codes/tree/main/utils)
 
 - ## encryption
-    - [Encoder](https://github.com/mike-urssu/sample-codes/blob/main/utils/src/encryption/Encoder.java)
+    - [Encoder(암호화)](https://github.com/mike-urssu/sample-codes/blob/main/utils/src/encryption/Encoder.java)
 - ## zip
-    - [Unzip](https://github.com/mike-urssu/sample-codes/blob/main/utils/src/zip/Unzip.java)
+    - [Zip(폴더 압축하기)](https://github.com/mike-urssu/sample-codes/blob/main/utils/src/zip/Zip.java)
+    - [Unzip(압축파일 풀기)](https://github.com/mike-urssu/sample-codes/blob/main/utils/src/zip/Unzip.java)
