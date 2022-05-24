@@ -21,3 +21,17 @@ text: `1234`
 algorithms: `SHA-256`
 
 encrypted text: `3ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4`
+
+# zip
+
+## Unzip
+
+### 설명
+
+`zipFile`을 `directory` 경로에 푼다.
+
+`zip`과 `tar`의 경우 `ArchiveInputStream`를 상속받기 때문에 `unzipZipOrTar()`로 묶어서 처리했다.
+
+`ArchiveStreamFactory`에서 지원하는 타입은 `ar`, `arj`, `cpio`, `dump`, `jar`가 있는데 모두 `ArchiveInputStream`를 상속받기 때문에 `unzipZipOrTar()` 메소드의 **`getArchiveName()`에 확장자를 추가하여 공통으로 사용**할 수 있다.
+
+반면 `7z`의 경우 `ArchiveInputStream`을 상속받지 않고 `SevenZFile`를 사용하므로 `unzip7z()` 메소드로 분리했다.
