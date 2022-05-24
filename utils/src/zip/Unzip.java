@@ -77,9 +77,8 @@ public class Unzip {
             SevenZFile sevenZFile = new SevenZFile(zipFile)
         ) {
             SevenZArchiveEntry archiveEntry;
-            while ((archiveEntry = sevenZFile.getNextEntry()) != null) {
+            while ((archiveEntry = sevenZFile.getNextEntry()) != null)
                 downstreamFile(directory, archiveEntry, sevenZFile.getInputStream(archiveEntry));
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }
