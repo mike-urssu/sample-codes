@@ -14,6 +14,15 @@ Text를 `MD2, MD5, SHA-1, SHA-256, SHA-384, SHA-512` 방식을 이용하여 암�
 
 ## Unzip
 
+### 사용한 library
+
+- commons-compress-1.21.jar
+  - 압축 관련 메소드 사용
+- xz-1.9.jar
+  - 7z 압축 파일을 푸는데 사용
+- commons-io-2.11.0.jar
+  - FileUtils, FilenameUtils 사용
+
 ### 설명
 
 zipFile을 directory 경로에 푼다.

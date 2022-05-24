@@ -11,6 +11,7 @@ import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
+import org.apache.commons.compress.archivers.StreamingNotSupportedException;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import org.apache.commons.io.FileUtils;
@@ -19,7 +20,7 @@ import org.apache.commons.io.FilenameUtils;
 public class Unzip {
     private static final ArchiveStreamFactory factory = new ArchiveStreamFactory();
 
-    public void unzip(File zipFile, File directory) throws IOException {
+    public void unzip(File zipFile, File directory) throws IOException, StreamingNotSupportedException {
         if (!zipFile.exists() || !zipFile.isFile())
             throw new FileNotFoundException(zipFile + "이 존재하지 않습니다.");
 
@@ -37,7 +38,7 @@ public class Unzip {
                 unzip7z(zipFile, directory);
                 break;
             default:
-                throw new ArchiveNameNotSupportedException(extension);
+                throw new StreamingNotSupportedException(extension);
         }
     }
 
@@ -56,7 +57,7 @@ public class Unzip {
         }
     }
 
-    private String getArchiveName(File zipFile) {
+    private String getArchiveName(File zipFile) throws StreamingNotSupportedException {
         String archiveName;
         String extension = FilenameUtils.getExtension(zipFile.getName());
         switch (extension) {
@@ -67,7 +68,7 @@ public class Unzip {
                 archiveName = ArchiveStreamFactory.TAR;
                 break;
             default:
-                throw new ArchiveNameNotSupportedException(extension);
+                throw new StreamingNotSupportedException(extension);
         }
         return archiveName;
     }
@@ -108,17 +109,11 @@ public class Unzip {
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, StreamingNotSupportedException {
         File zipFile = new File("utils/files/zip/zip 압축 파일.zip");
         File directory = new File("utils/files/zip/zip 압축 파일");
 
         Unzip unzip = new Unzip();
         unzip.unzip(zipFile, directory);
-    }
-}
-
-class ArchiveNameNotSupportedException extends RuntimeException {
-    public ArchiveNameNotSupportedException(String extension) {
-        super(extension + "은 지원되지 않는 확장자입니다.");
     }
 }
