@@ -10,6 +10,22 @@
 
 `MD2, MD5, SHA-1, SHA-256, SHA-384, SHA-512` 방식을 이용하여 Text를 암호화한다.
 
+# pdf
+
+## 사용한 library
+
+- commons-logging-1.2.jar
+- pdfbox-2.0.26.jar
+- pdfbox-tools-2.0.26.jar
+
+## Converter(PDF 변환하기)
+
+[소스 코드](https://github.com/mike-urssu/sample-codes/blob/main/utils/src/pdf/Converter.java)
+
+### 설명
+
+directory 경로에 pdf 파일을 이미지로 출력한다.
+
 # zip
 
 ## 사용한 library
@@ -39,6 +55,7 @@ zipFile을 directory 경로에 푼다.
 
 `zip, tar`의 경우 **ArchiveInputStream를 상속받기** 때문에 unzipZipOrTar()로 묶어서 처리한다.
 
-`ArchiveStreamFactory`에서 지원하는 `ar, arj, cpio, dump, jar`는 **ArchiveInputStream을 상속받기** 때문에 unzipZipOrTar() 메소드의 getArchiveName()에 확장자를 추가하여 공통으로 사용할 수 있다.
+`ArchiveStreamFactory`에서 지원하는 `ar, arj, cpio, dump, jar`는 **ArchiveInputStream을 상속받기** 때문에 unzipZipOrTar() 메소드의
+getArchiveName()에 확장자를 추가하여 공통으로 사용할 수 있다.
 
 반면 `7z`의 경우 **ArchiveInputStream을 상속받지 않고** `SevenZFile`를 사용하므로 `unzip7z()` 메소드로 분리해서 사용한다.
