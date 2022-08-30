@@ -2,11 +2,11 @@ package zip;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
@@ -26,7 +26,7 @@ public class Unzip {
 
         if (directory.exists())
             FileUtils.deleteDirectory(directory);
-        directory.mkdirs();
+        FileUtils.forceMkdir(directory);
 
         String extension = FilenameUtils.getExtension(zipFile.getName());
         switch (extension) {
@@ -44,10 +44,10 @@ public class Unzip {
 
     private void unzipZipOrTar(File zipFile, File directory) {
         try (
-            ArchiveInputStream archiveInputStream = factory.createArchiveInputStream(
-                getArchiveName(zipFile),
-                new FileInputStream(zipFile)
-            )
+                ArchiveInputStream archiveInputStream = factory.createArchiveInputStream(
+                        getArchiveName(zipFile),
+                        Files.newInputStream(zipFile.toPath())
+                )
         ) {
             ArchiveEntry archiveEntry;
             while ((archiveEntry = archiveInputStream.getNextEntry()) != null)
@@ -75,7 +75,7 @@ public class Unzip {
 
     public void unzip7z(File zipFile, File directory) {
         try (
-            SevenZFile sevenZFile = new SevenZFile(zipFile)
+                SevenZFile sevenZFile = new SevenZFile(zipFile)
         ) {
             SevenZArchiveEntry archiveEntry;
             while ((archiveEntry = sevenZFile.getNextEntry()) != null)
@@ -85,21 +85,21 @@ public class Unzip {
         }
     }
 
-    private void downstreamFile(File directory, ArchiveEntry archiveEntry, InputStream inputStream) {
+    private void downstreamFile(File directory, ArchiveEntry archiveEntry, InputStream inputStream) throws IOException {
         File file = new File(directory, archiveEntry.getName());
 
         File parentFile = file.getParentFile();
         if (!parentFile.exists())
-            parentFile.mkdirs();
+            FileUtils.forceMkdir(parentFile);
 
         if (archiveEntry.isDirectory())
-            file.mkdirs();
+            FileUtils.forceMkdir(file);
         else
             downstreamFile(file, inputStream);
     }
 
     private void downstreamFile(File file, InputStream inputStream) {
-        try (BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
+        try (BufferedOutputStream outputStream = new BufferedOutputStream(Files.newOutputStream(file.toPath()))) {
             byte[] buffer = new byte[1024];
             int size;
             while ((size = inputStream.read(buffer)) > 0)

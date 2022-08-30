@@ -3,12 +3,13 @@ package zip;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.NotDirectoryException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
@@ -17,7 +18,7 @@ public class Zip {
         if (!isValid(directory))
             return;
 
-        try (ZipOutputStream outputStream = new ZipOutputStream(new FileOutputStream(zipFile), StandardCharsets.UTF_8)) {
+        try (ZipOutputStream outputStream = new ZipOutputStream(Files.newOutputStream(zipFile.toPath()), StandardCharsets.UTF_8)) {
             for (File file : FileUtils.listFiles(directory, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)) {
                 try (FileInputStream inputStream = new FileInputStream(file)) {
                     String filename = file.getAbsolutePath().replace(directory.getAbsolutePath() + File.separator, "");
