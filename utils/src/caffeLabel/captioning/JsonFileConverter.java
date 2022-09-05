@@ -99,12 +99,11 @@ public class JsonFileConverter {
                             String filename = jsonFile.getName();
                             File newJsonFile = new File(newJsonDirectory, FilenameUtils.getBaseName(filename).concat("_(4_3).").concat(FilenameUtils.getExtension(filename)));
                             transformFile(jsonFile, newJsonFile);
-                        }));
+                        })
+                );
     }
 
     private void transformFile(File jsonFile, File newJsonFile) {
-//        File newJsonFile = new File(destDirectory, jsonFile.getParentFile().getName() + "/" + jsonFile.getName());
-
         try (
                 BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(jsonFile.toPath()), StandardCharsets.UTF_8));
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(newJsonFile.toPath()), StandardCharsets.UTF_8))
