@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import zip.Unzip;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -15,21 +16,25 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import org.apache.commons.compress.archivers.StreamingNotSupportedException;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 public class JsonFileConverter {
-    private static final File zipDirectory = new File("C:\\Users\\Administrator\\Desktop\\captioning\\jsonFiles\\old");
+    private static final Scanner scanner = new Scanner(System.in);
 
-    private static final File srcDirectory = new File("C:\\Users\\Administrator\\Desktop\\captioning\\jsonFiles\\old");
+    private File zipDirectory;
 
-    private static final File destDirectory = new File("C:\\Users\\Administrator\\Desktop\\captioning\\jsonFiles\\new");
+    private File srcDirectory;
 
-    private static final Zip zip = new Zip();
+    private File destDirectory;
+
+    private static final Unzip zip = new Unzip();
 
     private static final JsonHandler jsonHandler = new JsonHandler();
 
@@ -37,26 +42,34 @@ public class JsonFileConverter {
 
     public static void main(String[] args) {
         JsonFileConverter converter = new JsonFileConverter();
-
+        converter.setDirectories();
         converter.unzipZipFiles();
-
-        FileUtils.listFiles(srcDirectory, TrueFileFilter.TRUE, TrueFileFilter.TRUE)
-                .forEach(jsonDirectory ->
-                        FileUtils.listFiles(jsonDirectory, TrueFileFilter.TRUE, TrueFileFilter.TRUE)
-                                .forEach(jsonFile -> {
-                                            File newJsonDirectory = new File(destDirectory, jsonFile.getParentFile().getName());
-                                            if (!newJsonDirectory.exists()) {
-                                                try {
-                                                    FileUtils.forceMkdir(newJsonDirectory);
-                                                } catch (IOException e) {
-                                                    throw new RuntimeException(e);
-                                                }
-                                            }
-                                            converter.transformFile(destDirectory, jsonFile);
-                                        }
-                                ));
-
+        converter.convertFiles();
         malformedFiles.forEach(System.out::println);
+    }
+
+    public void setDirectories() {
+        setZipDirectory();
+        setSrcDirectory();
+        setDestDirectory();
+    }
+
+    private void setZipDirectory() {
+        System.out.print("압축 파일 경로: ");
+        String zipPath = scanner.nextLine();
+        this.zipDirectory = new File(zipPath);
+    }
+
+    private void setSrcDirectory() {
+        System.out.print("참조할 최상위 폴더 경로: ");
+        String srcPath = scanner.nextLine();
+        this.srcDirectory = new File(srcPath);
+    }
+
+    private void setDestDirectory() {
+        System.out.print("json 파일을 생성할 경로: ");
+        String destPath = scanner.nextLine();
+        this.destDirectory = new File(destPath);
     }
 
     public void unzipZipFiles() {
@@ -70,15 +83,34 @@ public class JsonFileConverter {
         });
     }
 
-    public void transformFile(File destDirectory, File jsonFile) {
-        File newJsonFile = new File(destDirectory, jsonFile.getParentFile().getName() + "/" + jsonFile.getName());
+    public void convertFiles() {
+        FileUtils.listFiles(srcDirectory, TrueFileFilter.TRUE, TrueFileFilter.TRUE)
+                .forEach(jsonDirectory -> FileUtils.listFiles(jsonDirectory, TrueFileFilter.TRUE, TrueFileFilter.TRUE)
+                        .forEach(jsonFile -> {
+                            File newJsonDirectory = new File(destDirectory, jsonFile.getParentFile().getName());
+                            if (!newJsonDirectory.exists()) {
+                                try {
+                                    FileUtils.forceMkdir(newJsonDirectory);
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+
+                            String filename = jsonFile.getName();
+                            File newJsonFile = new File(newJsonDirectory, FilenameUtils.getBaseName(filename).concat("_(4_3).").concat(FilenameUtils.getExtension(filename)));
+                            transformFile(jsonFile, newJsonFile);
+                        }));
+    }
+
+    private void transformFile(File jsonFile, File newJsonFile) {
+//        File newJsonFile = new File(destDirectory, jsonFile.getParentFile().getName() + "/" + jsonFile.getName());
 
         try (
                 BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(jsonFile.toPath()), StandardCharsets.UTF_8));
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(newJsonFile.toPath()), StandardCharsets.UTF_8))
         ) {
             JSONObject previousJsonObject = jsonHandler.getPreviousJsonObject(reader);
-            JSONObject newJsonObject = jsonHandler.getNewJsonObject(previousJsonObject);
+            JSONObject newJsonObject = jsonHandler.getNewJsonObject(jsonFile, previousJsonObject);
             JsonElement element = JsonParser.parseString(newJsonObject.toString());
             Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
             writer.write(gson.toJson(element));
