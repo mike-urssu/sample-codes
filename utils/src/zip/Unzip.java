@@ -46,7 +46,8 @@ public class Unzip {
         try (
                 ArchiveInputStream archiveInputStream = factory.createArchiveInputStream(
                         getArchiveName(zipFile),
-                        Files.newInputStream(zipFile.toPath())
+                        Files.newInputStream(zipFile.toPath()),
+                        "UTF-8"
                 )
         ) {
             ArchiveEntry archiveEntry;
